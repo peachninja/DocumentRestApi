@@ -44,7 +44,7 @@ namespace UnitTest
             ElasticSearchQueryController esQuery = new ElasticSearchQueryController(testClient);
             Assert.IsNotNull(esQuery);
             var testDocuments = esQuery.MatchAll();
-            int counttest = 3;
+            int counttest = 10;
             Assert.AreEqual(counttest, testDocuments.Count);
 
 
@@ -57,7 +57,7 @@ namespace UnitTest
 
             ElasticSearchQueryController esQuery = new ElasticSearchQueryController(testClient);
             var testDocuments = esQuery.MatchByText("formpipe");
-            int counttest = 1;
+            int counttest = 2;
             var test_guid = "a2a67acb-5b11-4cae-8198-a0bcab98f5e6";
             Assert.AreEqual(test_guid, testDocuments.ElementAt(0).ForeginKey);
             Assert.AreEqual(counttest, testDocuments.Count);

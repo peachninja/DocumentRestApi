@@ -84,7 +84,9 @@ namespace DocumentContainerRestService.Controllers
                 f => f.Metadata["FilePath"],
                 f => f.ForeginKey,
                 f => f.Text,
-                f => f.ContentType
+                f => f.ContentType,
+                f => f.Url
+                            
 
             )
         )
