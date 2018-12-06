@@ -43,53 +43,56 @@ namespace DocumentContainerRestService.Controllers
             }
             else
             {
-                return Ok(result);
+
+                 List<string> urlList = new List<string>();
+                foreach (var i in result)
+                {
+                    urlList.Add(i.Url);
+                }
+                return Ok(urlList);
             }
 
         }
 
-        [Route("filepath")]
-        // GET: api/Document/filepath
-        public IHttpActionResult GetFilePath()
-        {
-
-            var result = esQuery.MatchAllFilePaths();
-            if (result.Count < 1)
-            {
-                return Content(HttpStatusCode.NoContent, result);
-            }
-            else
-            {
-                return Ok(result);
-            }
-
-        }
         // GET: api/DocumentMetaDatas/5
         [Route("search/{id:int}", Name="GetDocDataById")]
         [ResponseType(typeof(DocumentMetaData))]
         public IHttpActionResult GetDocumentMetaData(int id)
         {
+
             var result = esQuery.MatchById(id);
             if (result == null)
             {
                 return NotFound();
             }
 
-            return Ok(result);
+            List<string> urlList = new List<string>();
+            foreach (var i in result)
+            {
+                urlList.Add(i.Url);
+            }
+            return Ok(urlList);
         }
         // GET: api/DocumentMetaDatas/search/text
         [Route("searchtext/{text}")]
         [HttpGet]
         public IHttpActionResult GetByText(string text)
         {
+
             var result = esQuery.MatchByText(text);
+
             if (result.Count < 1)
             {
                 return Content(HttpStatusCode.NoContent, result);
             }
             else
             {
-                return Ok(result);
+                List<string> urlList = new List<string>();
+                foreach (var i in result)
+                {
+                    urlList.Add(i.Url);
+                }
+                return Ok(urlList);
             }
         }
         // PUT: api/DocumentMetaDatas/5

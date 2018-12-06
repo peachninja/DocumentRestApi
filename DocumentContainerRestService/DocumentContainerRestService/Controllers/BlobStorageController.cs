@@ -12,7 +12,9 @@ namespace DocumentContainerRestService.Controllers
     public class BlobStorageController : Controller
     {
 
-        private BlobStorage blob;
+        private readonly BlobStorage blob;
+       
+
 
         public BlobStorageController()
         {
@@ -24,8 +26,8 @@ namespace DocumentContainerRestService.Controllers
             string filename = Path.GetFileNameWithoutExtension(data.Metadata["FilePath"]);
             string ext = Path.GetExtension(data.Metadata["FilePath"]);
             string blobreferencer = filename + data.ForeginKey + ext;
-            CloudBlockBlob cloudBlockBlob = blob.CloudBlobContainer.GetBlockBlobReference(blobreferencer);
-            cloudBlockBlob.UploadFromFile(data.Metadata["FilePath"]);
+            blob.CloudBlockBlob = blob.CloudBlobContainer.GetBlockBlobReference(blobreferencer);
+            blob.CloudBlockBlob.UploadFromFile(data.Metadata["FilePath"]);
             BlobContinuationToken blobContinuationToken = null;
             do
             {
@@ -41,6 +43,15 @@ namespace DocumentContainerRestService.Controllers
 
             return data;
 
+        }
+
+        public void DeleteFileFromBlob(DocumentMetaData data)
+        {
+            string filename = Path.GetFileNameWithoutExtension(data.Metadata["FilePath"]);
+            string ext = Path.GetExtension(data.Metadata["FilePath"]);
+            string blobreferencer = filename + data.ForeginKey + ext;
+            blob.CloudBlockBlob = blob.CloudBlobContainer.GetBlockBlobReference(blobreferencer);
+            blob.CloudBlockBlob.DeleteIfExistsAsync();
         }
     }
 }

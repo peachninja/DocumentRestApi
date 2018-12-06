@@ -13,6 +13,7 @@ namespace DocumentContainerRestService.Models
     {
         public CloudStorageAccount StorageAccount;
         public CloudBlobContainer CloudBlobContainer;
+        public CloudBlockBlob CloudBlockBlob;
         private readonly string _storageConnectionString = WebConfigurationManager.AppSettings["AzureBlobConnectionString"];
 
         public BlobStorage()

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web.Configuration;
+using DocumentContainerRestService.Controllers;
 using DocumentContainerRestService.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.WindowsAzure.Storage;
@@ -14,21 +15,21 @@ namespace IntergrationTest
     /// <summary>
     /// Summary description for BlobStorageTest
     /// </summary>
+    ///
+    /// 
     [TestClass]
+
     public class BlobStorageTest
     {
-        CloudStorageAccount storageAccount = null;
-        CloudBlobContainer cloudBlobContainer = null;
-
-        string storageConnectionString =
-            "DefaultEndpointsProtocol=https;AccountName=winx0007;AccountKey=Or7chC9Qt3N8D9/7lYICkIaiP3ksOfzrrP9IDuWXniW9ZDXcQnPQPzIOQJfnkKqXVr8hXKFct45tEN0IJCrPfQ==;EndpointSuffix=core.windows.net";
-        string sourceFile = null;
-
+        
+        DocumentMetaData testdoc = new DocumentMetaData();
+        string path = @"C:\Users\win.tin\Documents\testdovc.txt";
         public BlobStorageTest()
         {
             //
             // TODO: Add constructor logic here
             //
+           
         }
 
         private TestContext testContextInstance;
@@ -70,51 +71,14 @@ namespace IntergrationTest
         [TestMethod]
         public void ConnectionToBlobTest()
         {
-            if (CloudStorageAccount.TryParse(storageConnectionString, out storageAccount))
-            {
-             
-                
-                    CloudBlobClient cloudBlobClient = storageAccount.CreateCloudBlobClient();
+            BlobStorageController blobtest = new BlobStorageController();
+            Assert.IsNotNull(blobtest);
+            testdoc.Metadata["FilePath"] = path;
+            DocumentMetaData docmeta = blobtest.UploadFileToBlob(testdoc);
 
-                    
-                    cloudBlobContainer = cloudBlobClient.GetContainerReference("quickstartblobs");
-                     cloudBlobContainer.Create();
-                      
-
-                Assert.AreEqual("quickstartblobs", cloudBlobContainer.Name);
-                    BlobContainerPermissions permissions = new BlobContainerPermissions
-                    {
-                        PublicAccess = BlobContainerPublicAccessType.Blob
-                    };
-                     cloudBlobContainer.SetPermissions(permissions);
-                    string localPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                    string localFileName = "QuickStart_" + ".txt";
-                    sourceFile = Path.Combine(localPath, localFileName);
-                    // Write text to the file.
-                    File.WriteAllText(sourceFile, "Hello, World!");
-
-                    BlobContinuationToken blobContinuationToken = null;
-                    do
-                    {
-                        var results =  cloudBlobContainer.ListBlobsSegmented(null, blobContinuationToken);
-                        // Get the value of the continuation token returned by the listing call.
-                        blobContinuationToken = results.ContinuationToken;
-                        Assert.AreEqual("https://winx0007.blob.core.windows.net/QuickStart_.txt", results.Results.FirstOrDefault().Uri.ToString());
-                        Assert.AreEqual(1, results.Results.Count());
-                    } while (blobContinuationToken != null);
-                
-               
-                    if (cloudBlobContainer != null)
-                    {
-                         cloudBlobContainer.DeleteIfExists();
-                      
-                    }
-                
-                    File.Delete(sourceFile);
-                    
-                }
-            }
+            
 
         }
+    }
     
 }
