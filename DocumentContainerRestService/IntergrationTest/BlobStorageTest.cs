@@ -24,6 +24,9 @@ namespace IntergrationTest
         
         DocumentMetaData testdoc = new DocumentMetaData();
         string path = @"C:\Users\win.tin\Documents\testdovc.txt";
+
+        private string connectionString =
+            "DefaultEndpointsProtocol=https;AccountName=winx0007;AccountKey=Or7chC9Qt3N8D9/7lYICkIaiP3ksOfzrrP9IDuWXniW9ZDXcQnPQPzIOQJfnkKqXVr8hXKFct45tEN0IJCrPfQ==;EndpointSuffix=core.windows.net";
         public BlobStorageTest()
         {
             //
@@ -71,12 +74,32 @@ namespace IntergrationTest
         [TestMethod]
         public void ConnectionToBlobTest()
         {
-            BlobStorageController blobtest = new BlobStorageController();
+            BlobStorage blobtest = new BlobStorage();
             Assert.IsNotNull(blobtest);
             testdoc.Metadata["FilePath"] = path;
-            DocumentMetaData docmeta = blobtest.UploadFileToBlob(testdoc);
+            if (CloudStorageAccount.TryParse(connectionString, out blobtest.StorageAccount))
+            {
+                CloudBlobClient cloudBlobClient = blobtest.StorageAccount.CreateCloudBlobClient();
+                blobtest.CloudBlobContainer = cloudBlobClient.GetContainerReference("testblobcontainer");
+                blobtest.CloudBlobContainer.Create();
+                BlobContainerPermissions permissions = new BlobContainerPermissions
+                {
+                    PublicAccess = BlobContainerPublicAccessType.Blob
+                };
+                blobtest.CloudBlobContainer.SetPermissions(permissions);
 
-            
+
+                string filename = Path.GetFileNameWithoutExtension(testdoc.Metadata["FilePath"]);
+              
+                blobtest.CloudBlockBlob.UploadFromFile(testdoc.Metadata["FilePath"]);
+
+                string desinationFolder = @"E:\test\blob\";
+
+                blobtest.CloudBlockBlob.DownloadToFile(desinationFolder, FileMode.Create);
+                string filenameDownloadedTest = Path.GetFileNameWithoutExtension(desinationFolder+filename);
+
+                Assert.AreEqual(filename, filenameDownloadedTest);
+            }
 
         }
     }

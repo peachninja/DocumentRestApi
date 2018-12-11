@@ -320,6 +320,7 @@
     <Compile Include="Controllers\ElasticSearchQueryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Filters\BasicAuthenticationAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -335,10 +336,15 @@
     <Compile Include="Migrations\201812051416440_InitialCreate1.Designer.cs">
       <DependentUpon>201812051416440_InitialCreate1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201812111132313_001.cs" />
+    <Compile Include="Migrations\201812111132313_001.Designer.cs">
+      <DependentUpon>201812111132313_001.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BlobStorage.cs" />
     <Compile Include="Models\DocumentContainerRestServiceContext.cs" />
     <Compile Include="Models\DocumentMetaData.cs" />
+    <Compile Include="Models\DocumentVersionStatus.cs" />
     <Compile Include="Models\ElasticSearchClient.cs" />
     <Compile Include="Models\TikkaFileExtractor.cs" />
     <Compile Include="Models\Document.cs" />
@@ -437,6 +443,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201812051416440_InitialCreate1.resx">
       <DependentUpon>201812051416440_InitialCreate1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812111132313_001.resx">
+      <DependentUpon>201812111132313_001.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

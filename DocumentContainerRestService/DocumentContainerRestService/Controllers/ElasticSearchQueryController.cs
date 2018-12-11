@@ -41,7 +41,41 @@ namespace DocumentContainerRestService.Controllers
 
             return documents;
         }
+        public IReadOnlyCollection<IDocumentMetaData> MatchCurrentVersion()
+        {
+            var searchResponse = elClient.Client.Search<DocumentMetaData>(s => s
+                .Source(sf => sf
+                    .Includes(i => i
+                        .Fields(
+                            f => f.Metadata["FilePath"],
+                            f => f.ForeginKey,
+                            f => f.Text,
+                            f => f.ContentType,
+                            f => f.Url
 
+
+                        )
+                    )
+                    .Excludes(e => e
+                        .Fields(
+                            f => f.Id
+
+                        )
+                    )
+
+                )
+                .Query(q => q
+                    .Match(m => m
+                        .Field(f => f.Version).Query(DocumentVersionStatus.Current.ToString())
+
+                    )
+                )
+            );
+
+            var documents = searchResponse.Documents;
+
+            return documents;
+        }
         public IReadOnlyCollection<IDocumentMetaData> MatchAllFilePaths()
         {
             var searchResponse = elClient.Client.Search<DocumentMetaData>(s => s

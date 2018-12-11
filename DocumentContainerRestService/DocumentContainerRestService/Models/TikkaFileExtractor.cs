@@ -28,7 +28,8 @@ namespace DocumentContainerRestService.Models
 
             DocumentMetaData docmeta = new DocumentMetaData
             {
-                ForeginKey = doc.Guid.ToString()
+                ForeginKey = doc.Guid.ToString(),
+                Version = DocumentVersionStatus.Current
             };
             TextExtractionResult = TextExtractor.Extract(path);
 

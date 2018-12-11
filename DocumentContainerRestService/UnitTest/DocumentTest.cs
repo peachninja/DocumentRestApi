@@ -44,7 +44,7 @@ namespace UnitTest
             ElasticSearchQueryController esQuery = new ElasticSearchQueryController(testClient);
             Assert.IsNotNull(esQuery);
             var testDocuments = esQuery.MatchAll();
-            int counttest = 10;
+            int counttest = 2;
             Assert.AreEqual(counttest, testDocuments.Count);
 
 
@@ -69,8 +69,19 @@ namespace UnitTest
         {
 
             ElasticSearchQueryController esQuery = new ElasticSearchQueryController(testClient);
-            var testDocuments = esQuery.MatchById(3);
+            var testDocuments = esQuery.MatchById(2);
             int counttest = 1;
+            Assert.AreEqual(counttest, testDocuments.Count);
+
+        }
+
+        [TestMethod]
+        public void GetDocumentByVersionTest()
+        {
+
+            ElasticSearchQueryController esQuery = new ElasticSearchQueryController(testClient);
+            var testDocuments = esQuery.MatchCurrentVersion();
+            int counttest = 0;
             Assert.AreEqual(counttest, testDocuments.Count);
 
         }

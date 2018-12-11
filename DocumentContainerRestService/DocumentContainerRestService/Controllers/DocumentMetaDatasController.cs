@@ -9,11 +9,13 @@ using System.Net.Http;
 using System.Web.Configuration;
 using System.Web.Http;
 using System.Web.Http.Description;
+using DocumentContainerRestService.Filters;
 using DocumentContainerRestService.Interfaces;
 using DocumentContainerRestService.Models;
 
 namespace DocumentContainerRestService.Controllers
 {
+    [BasicAuthentication]
     [RoutePrefix("api/documentmetadata")]
     public class DocumentMetaDatasController : ApiController
     {
@@ -32,6 +34,7 @@ namespace DocumentContainerRestService.Controllers
             blobController = new BlobStorageController();
         }
         // GET: api/DocumentMetaDatas
+       
         [Route("")]
         public IHttpActionResult GetAll()
         {
@@ -53,7 +56,26 @@ namespace DocumentContainerRestService.Controllers
             }
 
         }
+        [Route("current")]
+        public IHttpActionResult GetAllCurrentVersionDocument()
+        {
 
+            var result = esQuery.MatchCurrentVersion();
+            if (result.Count < 1)
+            {
+                return Content(HttpStatusCode.NoContent, result);
+            }
+            else
+            {
+
+                List<string> urlList = new List<string>();
+                foreach (var i in result)
+                {
+                    urlList.Add(i.Url);
+                }
+                return Ok(urlList);
+            }
+        }
         // GET: api/DocumentMetaDatas/5
         [Route("search/{id:int}", Name="GetDocDataById")]
         [ResponseType(typeof(DocumentMetaData))]

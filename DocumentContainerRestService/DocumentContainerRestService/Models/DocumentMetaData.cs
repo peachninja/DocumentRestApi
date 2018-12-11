@@ -16,6 +16,7 @@ namespace DocumentContainerRestService.Models
         public IDictionary<string, string> Metadata { get; set; }
         public string Url { get; set; }
 
+        public DocumentVersionStatus Version { get; set; }
         public DocumentMetaData()
         {
            
