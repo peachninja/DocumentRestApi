@@ -11,6 +11,7 @@ namespace DocumentContainerRestService.Models
 
         public int Id { get; set; }
         public string ForeginKey { get; set; }
+        public Guid CaseId { get; set; }
         public string Text { get; set; }
         public string ContentType { get; set; }
         public IDictionary<string, string> Metadata { get; set; }

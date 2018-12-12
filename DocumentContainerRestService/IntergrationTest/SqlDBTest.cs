@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Data.SqlClient;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -7,8 +8,7 @@ namespace IntergrationTest
     [TestClass]
     public class SqlDBTest
     {
-        private string connectionString =
-            @"Data Source=(localdb)\MSSQLLocalDB; Initial Catalog=DocumentContainerRestServiceContext-20181122152647; Integrated Security=True; MultipleActiveResultSets=True; AttachDbFilename=|DataDirectory|DocumentContainerRestServiceContext-20181122152647.mdf";
+        private string connectionString = ConfigurationManager.ConnectionStrings[0].ConnectionString;
         [TestMethod]
         public void SqlConnection()
         {
@@ -17,8 +17,9 @@ namespace IntergrationTest
             {
                 try
                 {
-                    connection.Open();
                     checkConnection = true;
+                    connection.Open();
+                   
 
                 }
                 catch (SqlException)

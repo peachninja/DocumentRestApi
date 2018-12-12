@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Web.Configuration;
@@ -28,8 +29,7 @@ namespace IntergrationTest
         BlobContainerPermissions containerPermissions;
         CloudBlob blob;
 
-        private string connectionString =
-            "DefaultEndpointsProtocol=https;AccountName=winx0007;AccountKey=Or7chC9Qt3N8D9/7lYICkIaiP3ksOfzrrP9IDuWXniW9ZDXcQnPQPzIOQJfnkKqXVr8hXKFct45tEN0IJCrPfQ==;EndpointSuffix=core.windows.net";
+        private string connectionString = WebConfigurationManager.AppSettings["AzureBlobConnectionString"];
         public BlobStorageTest()
         {
             //
@@ -89,7 +89,7 @@ namespace IntergrationTest
                 var results = blobContainer.ListBlobsSegmented(null, blobContinuationToken);
                 // Get the value of the continuation token returned by the listing call.
                 blobContinuationToken = results.ContinuationToken;
-                Assert.AreEqual(2, results.Results.Count());
+                Assert.AreEqual(3, results.Results.Count());
               
             } while (blobContinuationToken != null);
         }

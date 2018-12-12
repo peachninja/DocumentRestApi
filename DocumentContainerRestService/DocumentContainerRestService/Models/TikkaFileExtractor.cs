@@ -21,15 +21,16 @@ namespace DocumentContainerRestService.Models
         {
             IDocument doc = new Document
             {
-                Guid = Guid.NewGuid()
-              
+                Guid = Guid.NewGuid(),
+                CaseId = Guid.NewGuid()
 
             };
 
             DocumentMetaData docmeta = new DocumentMetaData
             {
                 ForeginKey = doc.Guid.ToString(),
-                Version = DocumentVersionStatus.Current
+                Version = DocumentVersionStatus.Current,
+                CaseId = doc.CaseId
             };
             TextExtractionResult = TextExtractor.Extract(path);
 

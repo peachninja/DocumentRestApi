@@ -86,18 +86,18 @@ namespace IntergrationTest
             Assert.AreEqual("Laarman", new_data.LastName);
             new_data = new Person
             {
-
+                Id = new_data.Id,
                 FirstName = "Martijn_Update",
                 LastName = "Laarman_Update"
             };
-            var response = testClient.Client.Update<Person>(new_data, s => s
-                .Index("testindex")
-                .Type("document")
-                .Doc(new_data)
-            );
+            var response = testClient.Client.Index(new_data, i => i .Index("testindex").Type("document").Id(new_data.Id));
 
-            Assert.AreEqual("Martijn_Update", new_data.FirstName);
-            Assert.AreEqual("Laarman_Update", new_data.LastName);
+            var getResponseNew = testClient.Client.Get<Person>(1, s => s.Index("testindex").Type("document"));
+
+            var new_data_updated = getResponseNew.Source;
+
+            Assert.AreEqual("Martijn_Update", new_data_updated.FirstName);
+            Assert.AreEqual("Laarman_Update", new_data_updated.LastName);
 
           
 

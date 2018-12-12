@@ -340,6 +340,10 @@
     <Compile Include="Migrations\201812111132313_001.Designer.cs">
       <DependentUpon>201812111132313_001.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201812121615244_002.cs" />
+    <Compile Include="Migrations\201812121615244_002.Designer.cs">
+      <DependentUpon>201812121615244_002.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BlobStorage.cs" />
     <Compile Include="Models\DocumentContainerRestServiceContext.cs" />
@@ -446,6 +450,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201812111132313_001.resx">
       <DependentUpon>201812111132313_001.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812121615244_002.resx">
+      <DependentUpon>201812121615244_002.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -25,7 +25,7 @@ namespace DocumentContainerRestService.Controllers
         {
             string filename = Path.GetFileNameWithoutExtension(data.Metadata["FilePath"]);
             string ext = Path.GetExtension(data.Metadata["FilePath"]);
-            string blobreferencer = filename +"-"+ data.ForeginKey+ "-version="+ data.Version + ext;
+            string blobreferencer = filename +"-caseid="+data.CaseId+"-documentguid="+ data.ForeginKey+ "-version="+ data.Version + ext;
             _blob.CloudBlockBlob = _blob.CloudBlobContainer.GetBlockBlobReference(blobreferencer);
             _blob.CloudBlockBlob.UploadFromFile(data.Metadata["FilePath"]);
             BlobContinuationToken blobContinuationToken = null;
