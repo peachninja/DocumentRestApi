@@ -119,7 +119,7 @@ namespace DocumentContainerRestService.Controllers
         }
         // PUT: api/DocumentMetaDatas/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutDocumentMetaData(int id, DocumentMetaData documentMetaData)
+        public IHttpActionResult PutDocumentMetaData(int id, [FromBody] DocumentMetaData documentMetaData)
         {
             if (!ModelState.IsValid)
             {
@@ -135,7 +135,9 @@ namespace DocumentContainerRestService.Controllers
 
             try
             {
+               var response = esQuery.UpdateDocumentData(id, documentMetaData);
                 db.SaveChanges();
+                return Ok(response);
             }
             catch (DbUpdateConcurrencyException)
             {

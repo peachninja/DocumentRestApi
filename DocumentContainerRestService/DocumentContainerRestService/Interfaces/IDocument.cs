@@ -9,6 +9,7 @@ namespace DocumentContainerRestService.Interfaces
     public interface IDocument
     {
          int Id { get; set; }
+         Guid CaseId { get; set; }
          Guid Guid { get; set; }
          string Text { get; set; }
          string ContentType { get; set; }

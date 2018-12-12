@@ -21,9 +21,12 @@ namespace IntergrationTest
 
     public class BlobStorageTest
     {
-        
-        DocumentMetaData testdoc = new DocumentMetaData();
-        string path = @"C:\Users\win.tin\Documents\testdovc.txt";
+
+        CloudStorageAccount cloudStorageAccount;
+        CloudBlobClient blobClient;
+        CloudBlobContainer blobContainer;
+        BlobContainerPermissions containerPermissions;
+        CloudBlob blob;
 
         private string connectionString =
             "DefaultEndpointsProtocol=https;AccountName=winx0007;AccountKey=Or7chC9Qt3N8D9/7lYICkIaiP3ksOfzrrP9IDuWXniW9ZDXcQnPQPzIOQJfnkKqXVr8hXKFct45tEN0IJCrPfQ==;EndpointSuffix=core.windows.net";
@@ -74,33 +77,21 @@ namespace IntergrationTest
         [TestMethod]
         public void ConnectionToBlobTest()
         {
-            BlobStorage blobtest = new BlobStorage();
-            Assert.IsNotNull(blobtest);
-            testdoc.Metadata["FilePath"] = path;
-            if (CloudStorageAccount.TryParse(connectionString, out blobtest.StorageAccount))
+            cloudStorageAccount = CloudStorageAccount.Parse(connectionString);
+            blobClient = cloudStorageAccount.CreateCloudBlobClient();
+
+           
+            blobContainer = blobClient.GetContainerReference("document");
+
+            BlobContinuationToken blobContinuationToken = null;
+            do
             {
-                CloudBlobClient cloudBlobClient = blobtest.StorageAccount.CreateCloudBlobClient();
-                blobtest.CloudBlobContainer = cloudBlobClient.GetContainerReference("testblobcontainer");
-                blobtest.CloudBlobContainer.Create();
-                BlobContainerPermissions permissions = new BlobContainerPermissions
-                {
-                    PublicAccess = BlobContainerPublicAccessType.Blob
-                };
-                blobtest.CloudBlobContainer.SetPermissions(permissions);
-
-
-                string filename = Path.GetFileNameWithoutExtension(testdoc.Metadata["FilePath"]);
+                var results = blobContainer.ListBlobsSegmented(null, blobContinuationToken);
+                // Get the value of the continuation token returned by the listing call.
+                blobContinuationToken = results.ContinuationToken;
+                Assert.AreEqual(2, results.Results.Count());
               
-                blobtest.CloudBlockBlob.UploadFromFile(testdoc.Metadata["FilePath"]);
-
-                string desinationFolder = @"E:\test\blob\";
-
-                blobtest.CloudBlockBlob.DownloadToFile(desinationFolder, FileMode.Create);
-                string filenameDownloadedTest = Path.GetFileNameWithoutExtension(desinationFolder+filename);
-
-                Assert.AreEqual(filename, filenameDownloadedTest);
-            }
-
+            } while (blobContinuationToken != null);
         }
     }
     

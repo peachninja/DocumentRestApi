@@ -10,6 +10,8 @@ namespace DocumentContainerRestService.Models
     public class Document : IDocument
     {
         public int Id { get; set; }
+
+        public Guid CaseId { get; set; }
         public Guid Guid { get; set; }
         public string Text { get; set; }
         public string ContentType { get; set; }

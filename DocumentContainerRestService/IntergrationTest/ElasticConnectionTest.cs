@@ -71,6 +71,38 @@ namespace IntergrationTest
 
 
         }
+
+
+        [TestMethod]
+        public void UpdateDocumentIndexTest()
+        {
+         
+            var getResponse = testClient.Client.Get<Person>(1, s => s .Index("testindex") .Type("document"));
+
+            var new_data = getResponse.Source;
+
+            Assert.AreEqual(1, new_data.Id);
+            Assert.AreEqual("Martijn", new_data.FirstName);
+            Assert.AreEqual("Laarman", new_data.LastName);
+            new_data = new Person
+            {
+
+                FirstName = "Martijn_Update",
+                LastName = "Laarman_Update"
+            };
+            var response = testClient.Client.Update<Person>(new_data, s => s
+                .Index("testindex")
+                .Type("document")
+                .Doc(new_data)
+            );
+
+            Assert.AreEqual("Martijn_Update", new_data.FirstName);
+            Assert.AreEqual("Laarman_Update", new_data.LastName);
+
+          
+
+
+        }
         [TestMethod]
         public void GetIndexTest()
         {
@@ -83,6 +115,8 @@ namespace IntergrationTest
            
            
         }
+     
+
         [TestMethod]
         public void DeleteIndexTest()
         {

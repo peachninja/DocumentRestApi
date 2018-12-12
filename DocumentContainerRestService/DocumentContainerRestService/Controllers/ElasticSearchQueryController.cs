@@ -8,6 +8,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
+using MongoDB.Bson;
 
 namespace DocumentContainerRestService.Controllers
 {
@@ -66,7 +67,7 @@ namespace DocumentContainerRestService.Controllers
                 )
                 .Query(q => q
                     .Match(m => m
-                        .Field(f => f.Version).Query(DocumentVersionStatus.Current.ToString())
+                        .Field(f => f.Version).Query(1.ToString())
 
                     )
                 )
@@ -76,39 +77,7 @@ namespace DocumentContainerRestService.Controllers
 
             return documents;
         }
-        public IReadOnlyCollection<IDocumentMetaData> MatchAllFilePaths()
-        {
-            var searchResponse = elClient.Client.Search<DocumentMetaData>(s => s
-   .Source(sf => sf
-        .Includes(i => i
-            .Fields(
-                f => f.Metadata["FilePath"]
-               
-            )
-        )
-         .Excludes(e => e
-            .Fields(
-                f => f.Id,
-                f => f.ForeginKey,
-                f => f.Text,
-                f => f.ContentType
-             )
-        )
-
-    )
-    .Query(q => q
-        .MatchAll()
-    )
-                );
-
-            var documents = searchResponse.Documents;
-
-            return documents;
-
-
-
-
-        }
+      
         public IReadOnlyCollection<IDocumentMetaData> MatchById(int id)
         {
             var searchResponse = elClient.Client.Search<DocumentMetaData>(s => s
@@ -153,7 +122,7 @@ namespace DocumentContainerRestService.Controllers
         .MultiMatch(c => c
     .Fields(f => f.Field(p => p.Text))
     .Query(query)
-    .Analyzer("standard")
+    .Analyzer("standard_danish")
     .Boost(1.1)
     .Slop(2)
     .Fuzziness(Fuzziness.Auto)
@@ -174,7 +143,18 @@ namespace DocumentContainerRestService.Controllers
             return documents;
         }
 
+        public IUpdateResponse<DocumentMetaData> UpdateDocumentData(int id, DocumentMetaData data)
+        {
+            var getResponse = elClient.Client.Get<DocumentMetaData>(id, s => s .Index("document_test") .Type("document"));
 
+            data = getResponse.Source;
+            var response = elClient.Client.Update<DocumentMetaData>(data, s => s 
+                .Doc(data)
+            );
+
+            return response;
+
+        }
 
     }
 }

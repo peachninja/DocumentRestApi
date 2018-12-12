@@ -40,22 +40,7 @@ namespace DocumentContainerRestService.Controllers
             }
          
         }
-        [Route("filepath")]
-        // GET: api/Document/filepath
-        public IHttpActionResult GetFilePath()
-        {
-
-            var result = esQuery.MatchAllFilePaths();
-            if (result.Count < 1)
-            {
-                return Content(HttpStatusCode.NoContent, result);
-            }
-            else
-            {
-                return Ok(result);
-            }
-
-        }
+    
         // GET: api/Document/5
         [Route("search/{id:int}")]
         public IHttpActionResult Get(int id)
