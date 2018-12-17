@@ -30,7 +30,7 @@ namespace DocumentContainerRestService.Controllers
             string esendpoint = WebConfigurationManager.AppSettings["ElasticSearchEndpoint"];
             elclient = new ElasticSearchClient(esendpoint);
             esQuery = new ElasticSearchQueryController(elclient);
-            extractor = new TikkaFileExtractor();
+            extractor = new TikaFileExtractor();
             blobController = new BlobStorageController();
         }
         // GET: api/DocumentMetaDatas
@@ -50,7 +50,7 @@ namespace DocumentContainerRestService.Controllers
                  List<string> urlList = new List<string>();
                 foreach (var i in result)
                 {
-                    urlList.Add(i.Url);
+                    urlList.Add(i.DocumentVersion.DocumentPath);
                 }
                 return Ok(urlList);
             }
@@ -71,7 +71,7 @@ namespace DocumentContainerRestService.Controllers
                 List<string> urlList = new List<string>();
                 foreach (var i in result)
                 {
-                    urlList.Add(i.Url);
+                    urlList.Add(i.DocumentVersion.DocumentPath);
                 }
                 return Ok(urlList);
             }
@@ -91,7 +91,7 @@ namespace DocumentContainerRestService.Controllers
             List<string> urlList = new List<string>();
             foreach (var i in result)
             {
-                urlList.Add(i.Url);
+                urlList.Add(i.DocumentVersion.DocumentPath);
             }
             return Ok(urlList);
         }
@@ -112,7 +112,7 @@ namespace DocumentContainerRestService.Controllers
                 List<string> urlList = new List<string>();
                 foreach (var i in result)
                 {
-                    urlList.Add(i.Url);
+                    urlList.Add(i.DocumentVersion.DocumentPath);
                 }
                 return Ok(urlList);
             }
@@ -167,11 +167,12 @@ namespace DocumentContainerRestService.Controllers
             }
 
             var doc = extractor.Extract(value);
-            var newdoc = blobController.UploadFileToBlob(doc);
+            DocumentMetaData newdoc = blobController.UploadFileToBlob(doc);
             esQuery.AddIndex(newdoc);
             string uri = Url.Link("GetDocDataById", new { id = newdoc.Id });
             response.Headers.Location = new Uri(uri);
             db.DocumentMetaDatas.Add(newdoc);
+            db.DocumentVersions.Find(doc.DocumentVersion.Id).Size = newdoc.Size;
             db.SaveChanges();
 
             return response;

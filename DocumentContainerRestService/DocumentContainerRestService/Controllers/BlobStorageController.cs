@@ -12,35 +12,37 @@ namespace DocumentContainerRestService.Controllers
     public class BlobStorageController : Controller
     {
 
-        private readonly BlobStorage _blob;
+        private readonly AzureBlobStorage _blob;
        
         
 
         public BlobStorageController()
         {
-            this._blob = new BlobStorage();
+            this._blob = new AzureBlobStorage();
         }
 
         public DocumentMetaData UploadFileToBlob(DocumentMetaData data)
         {
-            string filename = Path.GetFileNameWithoutExtension(data.Metadata["FilePath"]);
-            string ext = Path.GetExtension(data.Metadata["FilePath"]);
-            string blobreferencer = filename +"-caseid="+data.CaseId+"-documentguid="+ data.ForeginKey+ "-version="+ data.Version + ext;
-            _blob.CloudBlockBlob = _blob.CloudBlobContainer.GetBlockBlobReference(blobreferencer);
-            _blob.CloudBlockBlob.UploadFromFile(data.Metadata["FilePath"]);
+            string filename = Path.GetFileNameWithoutExtension(data.FilePath);
+            string ext = Path.GetExtension(data.FilePath);
+            string blobReferencer = filename +"-caseid="+data.Document.CaseId+"-documentguid="+ data.Document.Guid+ "-version="+ data.Document.VersionStatus + ext;
+            _blob.CloudBlockBlob = _blob.CloudBlobContainer.GetBlockBlobReference(blobReferencer);
+            _blob.CloudBlockBlob.UploadFromFile(data.FilePath);
             BlobContinuationToken blobContinuationToken = null;
             do
             {
-                var results =  _blob.CloudBlobContainer.ListBlobsSegmented(blobreferencer, blobContinuationToken);
+                var results =  _blob.CloudBlobContainer.ListBlobsSegmented(blobReferencer, blobContinuationToken);
                 // Get the value of the continuation token returned by the listing call.
                 blobContinuationToken = results.ContinuationToken;
                 for (int i = 0; i < results.Results.Count(); i++)
                 {
-                    data.Url = results.Results.First().Uri.ToString();
+                    data.DocumentVersion.DocumentPath = results.Results.First().Uri.ToString();
+                 
                 }
              
             } while (blobContinuationToken != null);
-
+            _blob.CloudBlockBlob.FetchAttributes();
+            data.Size = (int)(_blob.CloudBlockBlob.Properties.Length);
             return data;
 
         }
@@ -51,16 +53,17 @@ namespace DocumentContainerRestService.Controllers
         }
        public void DeleteFileFromBlob(DocumentMetaData data)
         {
-            string filename = Path.GetFileNameWithoutExtension(data.Metadata["FilePath"]);
-            string ext = Path.GetExtension(data.Metadata["FilePath"]);
-            string blobreferencer = filename + data.ForeginKey + ext;
-            _blob.CloudBlockBlob = _blob.CloudBlobContainer.GetBlockBlobReference(blobreferencer);
+            string filename = Path.GetFileNameWithoutExtension(data.FilePath);
+            string ext = Path.GetExtension(data.FilePath);
+            string blobReferencer = filename + "-caseid=" + data.Document.CaseId + "-documentguid=" + data.Document.Guid + "-version=" + data.Document.VersionStatus + ext;
+
+            _blob.CloudBlockBlob = _blob.CloudBlobContainer.GetBlockBlobReference(blobReferencer);
             _blob.CloudBlockBlob.DeleteIfExistsAsync();
         }
 
-        public void DownloadFile(string refenrencer)
+        public void DownloadFile(string referencer)
         {
-            _blob.CloudBlockBlob = _blob.CloudBlobContainer.GetBlockBlobReference(refenrencer);
+            _blob.CloudBlockBlob = _blob.CloudBlobContainer.GetBlockBlobReference(referencer);
             string localPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             _blob.CloudBlockBlob.DownloadToFile(localPath, FileMode.Create);
         }

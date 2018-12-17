@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DocumentContainerRestService.Models;
 
 namespace DocumentContainerRestService.Interfaces
 {
@@ -10,11 +11,11 @@ namespace DocumentContainerRestService.Interfaces
     {
 
          int Id { get; set; }
-         string ForeginKey { get; set; }
-         string Text { get; set; }
-         string ContentType { get; set; }
-         IDictionary<string, string> Metadata { get; set; }
+        string Text { get; set; }
 
-        string Url { get; set; }
+        string FilePath { get; set; }
+        int Size { get; set; }
+         Document Document { get; set; }
+         DocumentVersion DocumentVersion { get; set; }
     }
 }

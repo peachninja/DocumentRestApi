@@ -17,12 +17,12 @@ namespace UnitTest
         public void CreateDocumentMetadDataTest()
         {
             string path = @"C:\Users\win.tin\Documents\testdovc.txt";
-            IFileExtractor testExtractor = new TikkaFileExtractor();
+            IFileExtractor testExtractor = new TikaFileExtractor();
             IDocumentMetaData testDoc =  testExtractor.Extract(path);
             Assert.IsInstanceOfType(testDoc, typeof(DocumentMetaData));
             Assert.IsNotNull(testDoc);
-            Assert.AreEqual(testDoc.Metadata["FilePath"], path);
-            Assert.AreEqual(4, testDoc.Metadata.Count);
+            Assert.AreEqual(testDoc.FilePath, path);
+           // Assert.AreEqual(4, testDoc.Metadata.Count);
             string text = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nSprogpakker føjer flere værktøjer til skærm, hjælp eller korrektur til Office." +
                 " Du kan installere ekstra tilbehørssprogpakker, når du har installeret Microsoft Office. Hvis en tilbehørssprogpakke beskrives" +
                 " som delvist lokaliseret, vil nogle dele af Office muligvis stadigvæk blive vist på det sprog, som din kopi af Microsoft Office har.\r\r\n\r\r\nHvis " +
@@ -31,7 +31,7 @@ namespace UnitTest
             Assert.AreEqual(text, testDoc.Text);
 
             string filepath = @"C:\Users\win.tin\Documents\testdovc.txt";
-            Assert.AreEqual(filepath, testDoc.Metadata["FilePath"]);
+            Assert.AreEqual(filepath, testDoc.FilePath);
 
        
         }
@@ -59,7 +59,7 @@ namespace UnitTest
             var testDocuments = esQuery.MatchByText("formpipe");
             int counttest = 0;
             var test_guid = "a2a67acb-5b11-4cae-8198-a0bcab98f5e6";
-           // Assert.AreEqual(test_guid, testDocuments.ElementAt(0).ForeginKey);
+           // Assert.AreEqual(test_guid, testDocuments.ElementAt(0).ForeignKey);
             Assert.AreEqual(counttest, testDocuments.Count);
 
         }

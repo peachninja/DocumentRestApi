@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Data.SqlClient;
+using DocumentContainerRestService.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace IntergrationTest
@@ -12,23 +13,26 @@ namespace IntergrationTest
         [TestMethod]
         public void SqlConnection()
         {
-            bool checkConnection = true;
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (var db = new DocumentContainerRestServiceContext())
             {
+                var checkConnection = false;
                 try
                 {
-                    checkConnection = true;
-                    connection.Open();
-                   
-
+                    
+                    checkConnection = db.Database.Exists(); 
                 }
-                catch (SqlException)
+                catch (Exception e)
                 {
-                    checkConnection = false;
+                    Console.WriteLine(e);
+                    throw;
+                    
                 }
-
+                
                 Assert.AreEqual(true, checkConnection);
+
             }
+           
+           
         }
     }
 }

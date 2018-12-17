@@ -9,14 +9,14 @@ using sun.security.util;
 
 namespace DocumentContainerRestService.Models
 {
-    public class BlobStorage
+    public class AzureBlobStorage
     {
         public CloudStorageAccount StorageAccount;
         public CloudBlobContainer CloudBlobContainer;
         public CloudBlockBlob CloudBlockBlob;
         private readonly string _storageConnectionString = WebConfigurationManager.AppSettings["AzureBlobConnectionString"];
 
-        public BlobStorage()
+        public AzureBlobStorage()
         {
             if (CloudStorageAccount.TryParse(_storageConnectionString, out this.StorageAccount))
             {

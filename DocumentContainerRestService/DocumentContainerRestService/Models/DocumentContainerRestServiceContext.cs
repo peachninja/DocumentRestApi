@@ -20,5 +20,9 @@ namespace DocumentContainerRestService.Models
         }
 
         public System.Data.Entity.DbSet<DocumentContainerRestService.Models.DocumentMetaData> DocumentMetaDatas { get; set; }
+
+        public System.Data.Entity.DbSet<DocumentContainerRestService.Models.Document> Documents { get; set; }
+
+        public System.Data.Entity.DbSet<DocumentContainerRestService.Models.DocumentVersion> DocumentVersions { get; set; }
     }
 }
