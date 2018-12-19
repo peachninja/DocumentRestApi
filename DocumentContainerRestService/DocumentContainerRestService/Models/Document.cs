@@ -28,7 +28,7 @@ namespace DocumentContainerRestService.Models
 
         [Column(TypeName = "datetime2")]
         public DateTime CheckedOutTime { get; set; }
-        public IDictionary<string, string> Metadata { get; set; }
+     
 
      
     }

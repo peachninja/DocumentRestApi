@@ -85,5 +85,31 @@ namespace UnitTest
             Assert.AreEqual(counttest, testDocuments.Count);
 
         }
+
+
+        [TestMethod]
+        public void GetDocumentMetadDataByDocumentIdTest()
+        {
+
+            ElasticSearchQueryController esQuery = new ElasticSearchQueryController(testClient);
+            string guidTest = "1B2E0AE5-E92A-4CCB-89C7-A4ACB5EF93FD";
+            var testDocuments = esQuery.MatchAllDocumentVersionByDocId(guidTest);
+            int counttest = 1;
+            Assert.AreEqual(counttest, testDocuments.Count);
+
+        }
+
+
+        [TestMethod]
+        public void GetNewestDocumentMetadDataByDocumentIdTest()
+        {
+
+            ElasticSearchQueryController esQuery = new ElasticSearchQueryController(testClient);
+            string guidTest = "1B2E0AE5-E92A-4CCB-89C7-A4ACB5EF93FD";
+            var testDocuments = esQuery.MatchNewestDocumentVersionByDocId(guidTest);
+            
+            Assert.AreEqual(1, testDocuments.DocumentVersion.VersionNumber);
+
+        }
     }
 }

@@ -177,6 +177,7 @@
       <HintPath>..\packages\System.Buffers.4.4.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.DirectoryServices.Protocols" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Memory, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.5.1\lib\netstandard2.0\System.Memory.dll</HintPath>
@@ -363,6 +364,10 @@
     <Compile Include="Migrations\201812131355171_006.Designer.cs">
       <DependentUpon>201812131355171_006.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201812171531431_007.cs" />
+    <Compile Include="Migrations\201812171531431_007.Designer.cs">
+      <DependentUpon>201812171531431_007.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AzureBlobStorage.cs" />
     <Compile Include="Models\Category.cs" />
@@ -496,6 +501,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201812131355171_006.resx">
       <DependentUpon>201812131355171_006.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812171531431_007.resx">
+      <DependentUpon>201812171531431_007.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

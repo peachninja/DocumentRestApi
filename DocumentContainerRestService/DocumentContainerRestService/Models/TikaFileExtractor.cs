@@ -11,7 +11,7 @@ namespace DocumentContainerRestService.Models
 {
     public class TikaFileExtractor : IFileExtractor
     {
-        private TextExtractor TextExtractor { get; set; }
+        public TextExtractor TextExtractor { get; set; }
         public TextExtractionResult TextExtractionResult { get; set; }
 
         private readonly DocumentsController _docController;
@@ -36,7 +36,8 @@ namespace DocumentContainerRestService.Models
                 FilePath = TextExtractionResult.Metadata["FilePath"],
                 Text = TextExtractionResult.Text,
                 Document = doc,
-                DocumentVersion = docVersion
+                DocumentVersion = docVersion,
+                Metadata = TextExtractionResult.Metadata
             };
 
            

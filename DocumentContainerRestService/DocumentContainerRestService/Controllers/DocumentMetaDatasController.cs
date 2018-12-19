@@ -77,7 +77,7 @@ namespace DocumentContainerRestService.Controllers
             }
         }
         // GET: api/DocumentMetaDatas/5
-        [Route("search/{id:int}", Name="GetDocDataById")]
+        [Route("id/{id:int}", Name="GetDocDataById")]
         [ResponseType(typeof(DocumentMetaData))]
         public IHttpActionResult GetDocumentMetaData(int id)
         {
@@ -96,7 +96,7 @@ namespace DocumentContainerRestService.Controllers
             return Ok(urlList);
         }
         // GET: api/DocumentMetaDatas/search/text
-        [Route("searchtext/{text}")]
+        [Route("text/{text}")]
         [HttpGet]
         public IHttpActionResult GetByText(string text)
         {
@@ -116,6 +116,49 @@ namespace DocumentContainerRestService.Controllers
                 }
                 return Ok(urlList);
             }
+        }
+
+        // GET: api/DocumentMetaDatas/search/text
+        [Route("documentid/{guid}")]
+        [HttpGet]
+        public IHttpActionResult GetAllDocumentVersionForDocumentByDocumentId(string guid)
+        {
+
+            var result = esQuery.MatchAllDocumentVersionByDocId(guid);
+
+            if (result.Count < 1)
+            {
+                return Content(HttpStatusCode.NoContent, result);
+            }
+            else
+            {
+                List<string> urlList = new List<string>();
+                foreach (var i in result)
+                {
+                    urlList.Add(i.DocumentVersion.DocumentPath);
+                }
+                return Ok(urlList);
+            }
+        }
+
+        // GET: api/DocumentMetaDatas/search/text
+        [Route("documentid/newest/{guid}")]
+        [HttpGet]
+        public IHttpActionResult GetNewestDocumentVersionForDocumentByDocumentId(string guid)
+        {
+
+            var result = esQuery.MatchNewestDocumentVersionByDocId(guid);
+
+            if (result != null)
+            {
+                return Ok(result.DocumentVersion.DocumentPath);
+            }
+            else
+            {
+                return Content(HttpStatusCode.NoContent, "No result");
+            }
+          
+            
         }
         // PUT: api/DocumentMetaDatas/5
         [ResponseType(typeof(void))]

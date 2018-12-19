@@ -35,7 +35,7 @@ namespace DocumentContainerRestService.Models
         )
     )
     .Mappings(m => m
-        .Map<Document>(mm => mm
+        .Map<DocumentMetaData>(mm => mm
             .Properties(p => p
                 .Text(t => t
                     .Name(n => n.Text)

@@ -14,5 +14,7 @@ namespace DocumentContainerRestService.Models
         public int Size { get; set; }
         public Document Document { get; set; }
         public DocumentVersion DocumentVersion { get; set; }
+
+        public IDictionary<string, string> Metadata { get; set; }
     }
 }

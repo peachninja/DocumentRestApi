@@ -41,10 +41,19 @@ namespace DocumentContainerRestService.Controllers
         // GET: DocumentVersions/Create
         public DocumentVersion Create(Document document, TextExtractionResult result)
         {
+            int versionNumber = 1;
+            if (db.DocumentVersions.Where(a => a.DocumentId == document.Guid) != null)
+            {
+                var docVer = db.DocumentVersions.Where(a => a.DocumentId == document.Guid)
+                    .OrderBy(a => a.VersionNumber).Last();
+                versionNumber += docVer.VersionNumber;
+            }
+           
+          
             DocumentVersion docVersion = new DocumentVersion
             {
                 DocumentId = document.Guid,
-                VersionNumber = 1,
+                VersionNumber = versionNumber,
                 FileName = Path.GetFileNameWithoutExtension(result.Metadata["FilePath"]),
                 FileExtension = Path.GetExtension(result.Metadata["FilePath"]),
                 LastUpdated = DateTime.Parse(result.Metadata["Last-Modified"]),
