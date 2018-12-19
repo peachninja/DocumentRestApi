@@ -98,7 +98,7 @@ namespace UnitTest
             Assert.AreEqual(counttest, testDocuments.Count);
 
         }
-
+        
 
         [TestMethod]
         public void GetNewestDocumentMetadDataByDocumentIdTest()
@@ -109,6 +109,18 @@ namespace UnitTest
             var testDocuments = esQuery.MatchNewestDocumentVersionByDocId(guidTest);
             
             Assert.AreEqual(1, testDocuments.DocumentVersion.VersionNumber);
+
+        }
+
+        [TestMethod]
+        public void GetDocumentMetadDataByCaseIdTest()
+        {
+
+            ElasticSearchQueryController esQuery = new ElasticSearchQueryController(testClient);
+            string guidTest = "9898ac0e-4d2c-4949-84de-d79e4e62e187";
+            var testDocuments = esQuery.MatchAllDocumentVersionByDocId(guidTest);
+            int counttest = 1;
+            Assert.AreEqual(counttest, testDocuments.Count);
 
         }
     }

@@ -109,6 +109,22 @@ namespace DocumentContainerRestService.Controllers
             return documents;
         }
 
+        public IReadOnlyCollection<DocumentMetaData> MatchByCaseId(string caseguid)
+        {
+            var searchResponse = elClient.Client.Search<DocumentMetaData>(s => s
+
+                .Query(q => q
+                    .Match(m => m
+                        .Field(f => f.Document.CaseId).Query(caseguid)
+
+                    )
+                )
+            );
+
+            var documents = searchResponse.Documents;
+
+            return documents;
+        }
         public IDocumentMetaData MatchNewestDocumentVersionByDocId(string query)
         {
             var searchResponse = elClient.Client.Search<DocumentMetaData>(s => s

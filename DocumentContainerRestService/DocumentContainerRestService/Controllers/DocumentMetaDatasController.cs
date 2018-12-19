@@ -76,7 +76,7 @@ namespace DocumentContainerRestService.Controllers
                 return Ok(urlList);
             }
         }
-        // GET: api/DocumentMetaDatas/5
+      
         [Route("id/{id:int}", Name="GetDocDataById")]
         [ResponseType(typeof(DocumentMetaData))]
         public IHttpActionResult GetDocumentMetaData(int id)
@@ -95,7 +95,7 @@ namespace DocumentContainerRestService.Controllers
             }
             return Ok(urlList);
         }
-        // GET: api/DocumentMetaDatas/search/text
+      
         [Route("text/{text}")]
         [HttpGet]
         public IHttpActionResult GetByText(string text)
@@ -105,7 +105,7 @@ namespace DocumentContainerRestService.Controllers
 
             if (result.Count < 1)
             {
-                return Content(HttpStatusCode.NoContent, result);
+                return Content(HttpStatusCode.NoContent, "No Result");
             }
             else
             {
@@ -118,7 +118,7 @@ namespace DocumentContainerRestService.Controllers
             }
         }
 
-        // GET: api/DocumentMetaDatas/search/text
+      
         [Route("documentid/{guid}")]
         [HttpGet]
         public IHttpActionResult GetAllDocumentVersionForDocumentByDocumentId(string guid)
@@ -141,7 +141,7 @@ namespace DocumentContainerRestService.Controllers
             }
         }
 
-        // GET: api/DocumentMetaDatas/search/text
+       
         [Route("documentid/newest/{guid}")]
         [HttpGet]
         public IHttpActionResult GetNewestDocumentVersionForDocumentByDocumentId(string guid)
@@ -159,6 +159,27 @@ namespace DocumentContainerRestService.Controllers
             }
           
             
+        }
+
+       
+        [Route("caseid/{guid}")]
+        [HttpGet]
+        public IHttpActionResult GetrDocumentByCasetId(string guid)
+        {
+
+            var result = esQuery.MatchByCaseId(guid);
+
+            if (result.Count < 1)
+            {
+                return Content(HttpStatusCode.NoContent, result);
+            }
+            else
+            {
+               
+                return Ok(result);
+            }
+
+
         }
         // PUT: api/DocumentMetaDatas/5
         [ResponseType(typeof(void))]
