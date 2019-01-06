@@ -79,17 +79,13 @@ namespace IntergrationTest
         {
             cloudStorageAccount = CloudStorageAccount.Parse(connectionString);
             blobClient = cloudStorageAccount.CreateCloudBlobClient();
-
-           
             blobContainer = blobClient.GetContainerReference("document");
-
             BlobContinuationToken blobContinuationToken = null;
             do
             {
                 var results = blobContainer.ListBlobsSegmented(null, blobContinuationToken);
-                // Get the value of the continuation token returned by the listing call.
                 blobContinuationToken = results.ContinuationToken;
-                Assert.AreEqual(3, results.Results.Count());
+                Assert.AreEqual(2, results.Results.Count());
               
             } while (blobContinuationToken != null);
         }

@@ -12,9 +12,8 @@ namespace UnitTest
     [TestClass]
     public class DocumentTest
     {
-        TikaFileExtractor extractorTest = new TikaFileExtractor();
-        DocumentsController test_controller = new DocumentsController();
-        private string pathTest = @"C:\Users\win.tin\Documents\testingblobupload.docx";
+
+      
 
     
 
@@ -29,9 +28,14 @@ namespace UnitTest
                
                 try
                 {
-                    extractorTest.TextExtractionResult = extractorTest.TextExtractor.Extract(pathTest);
+                 
 
-                    Document doctest = test_controller.Create(extractorTest.TextExtractionResult);
+                    Document doctest = new Document();
+                    doctest.Id = 100;
+                    doctest.CaseId = Guid.NewGuid();
+                    doctest.Guid = Guid.NewGuid();
+                    db.Documents.Add(doctest);
+                    db.SaveChanges();
                     Document docToTest = db.Documents.FirstOrDefault(a => a.Id == doctest.Id);
                     
                     Assert.IsNotNull(docToTest);

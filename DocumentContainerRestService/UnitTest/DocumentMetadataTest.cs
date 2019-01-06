@@ -14,14 +14,14 @@ namespace UnitTest
        
 
         [TestMethod]
-        public void CreateDocumentMetadDataTest()
+        public void CreateDocumentMetaDataTest()
         {
             string path = @"C:\Users\win.tin\Documents\testdovc.txt";
             IFileExtractor testExtractor = new TikaFileExtractor();
             IDocumentMetaData testDoc =  testExtractor.Extract(path);
             Assert.IsInstanceOfType(testDoc, typeof(DocumentMetaData));
             Assert.IsNotNull(testDoc);
-            Assert.AreEqual(testDoc.FilePath, path);
+            Assert.AreEqual(path, testDoc.FilePath);
            // Assert.AreEqual(4, testDoc.Metadata.Count);
             string text = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nSprogpakker føjer flere værktøjer til skærm, hjælp eller korrektur til Office." +
                 " Du kan installere ekstra tilbehørssprogpakker, når du har installeret Microsoft Office. Hvis en tilbehørssprogpakke beskrives" +
@@ -29,11 +29,6 @@ namespace UnitTest
                 "et sprog kun vises én gang, f.eks. tysk, så omfatter pakken værktøjer til alle lande/områder, der bruger dette sprog.\r\n";
 
             Assert.AreEqual(text, testDoc.Text);
-
-            string filepath = @"C:\Users\win.tin\Documents\testdovc.txt";
-            Assert.AreEqual(filepath, testDoc.FilePath);
-
-       
         }
 
 
@@ -81,7 +76,7 @@ namespace UnitTest
 
             ElasticSearchQueryController esQuery = new ElasticSearchQueryController(testClient);
             var testDocuments = esQuery.MatchCurrentVersion();
-            int counttest = 1;
+            int counttest = 0;
             Assert.AreEqual(counttest, testDocuments.Count);
 
         }
@@ -90,13 +85,13 @@ namespace UnitTest
         [TestMethod]
         public void GetDocumentMetadDataByDocumentIdTest()
         {
-
             ElasticSearchQueryController esQuery = new ElasticSearchQueryController(testClient);
             string guidTest = "1B2E0AE5-E92A-4CCB-89C7-A4ACB5EF93FD";
             var testDocuments = esQuery.MatchAllDocumentVersionByDocId(guidTest);
             int counttest = 1;
             Assert.AreEqual(counttest, testDocuments.Count);
-
+            string filenameTest = "Calculator v4";
+            Assert.AreEqual(filenameTest, testDocuments.FirstOrDefault().DocumentVersion.FileName);
         }
         
 
@@ -118,7 +113,7 @@ namespace UnitTest
 
             ElasticSearchQueryController esQuery = new ElasticSearchQueryController(testClient);
             string guidTest = "9898ac0e-4d2c-4949-84de-d79e4e62e187";
-            var testDocuments = esQuery.MatchAllDocumentVersionByDocId(guidTest);
+            var testDocuments = esQuery.MatchByCaseId(guidTest);
             int counttest = 1;
             Assert.AreEqual(counttest, testDocuments.Count);
 

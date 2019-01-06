@@ -26,7 +26,6 @@ namespace IntergrationTest
            
             
             var request = new RestRequest("/", Method.GET);
-
             IRestResponse response = client.Execute(request);
             var content = response.Content;
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
@@ -42,14 +41,10 @@ namespace IntergrationTest
         public void CreateIndexTest()
         {
             testClient.Client.CreateIndex("testindex");
-
             var request = new RestRequest("/testindex", Method.GET);
-
             IRestResponse response = client.Execute(request);
             var content = response.Content;
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-
-
         }
 
 

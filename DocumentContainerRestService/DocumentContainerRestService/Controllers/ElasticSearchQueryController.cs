@@ -148,7 +148,7 @@ namespace DocumentContainerRestService.Controllers
             var searchResponse = elClient.Client.Search<DocumentMetaData>(s => s
        .Query(q => q
         .MultiMatch(c => c
-    .Fields(f => f.Field(p => p.Text))
+    .Fields(f => f.Field(p => p.Text).Field(p => p.Document.Title))
     .Query(query)
     .Analyzer("standard_danish")
     .Boost(1.1)
@@ -167,7 +167,6 @@ namespace DocumentContainerRestService.Controllers
         )
          ));
             var documents = searchResponse.Documents;
-
             return documents;
         }
 

@@ -229,7 +229,6 @@ namespace DocumentContainerRestService.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
-
             var doc = extractor.Extract(value);
             DocumentMetaData newdoc = blobController.UploadFileToBlob(doc);
             esQuery.AddIndex(newdoc);
@@ -238,7 +237,6 @@ namespace DocumentContainerRestService.Controllers
             db.DocumentMetaDatas.Add(newdoc);
             db.DocumentVersions.Find(doc.DocumentVersion.Id).Size = newdoc.Size;
             db.SaveChanges();
-
             return response;
         }
 
